@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
