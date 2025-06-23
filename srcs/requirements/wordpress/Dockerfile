@@ -10,8 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /run/php && \
-    php_fpm_path=$(which php-fpm) && \
-    echo "PHP-FPM path: $php_fpm_path"
+    echo "PHP-FPM path: $(which php-fpm)"
 
 RUN mkdir -p /var/www/html
 
