@@ -1,13 +1,17 @@
 FROM debian:oldstable
 
 RUN apt-get update && apt-get install -y \
-    php php-fpm php-mysql php-json php-curl \
+    php-fpm php-mysql php-json php-curl \
     php-dom php-exif php-fileinfo php-gd \
-    php-iconv php-mbstring  php-imagick \
+    php-iconv php-mbstring php-imagick \
     php-simplexml php-soap php-xml \
     php-xmlreader php-zip wget curl less mariadb-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /run/php && \
+    php_fpm_path=$(which php-fpm) && \
+    echo "PHP-FPM path: $php_fpm_path"
 
 RUN mkdir -p /var/www/html
 
@@ -20,11 +24,13 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-COPY www.conf /etc/php81/php-fpm.d/www.conf
+RUN php_version=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;") && \
+    mkdir -p /etc/php/$php_version/fpm/pool.d/
+
+COPY www.conf /etc/php/*/fpm/pool.d/
 COPY setup.sh /setup.sh
 
 RUN chmod +x /setup.sh
 
 ENTRYPOINT ["/setup.sh"]
-CMD ["php-fpm81", "-F"]
-
+CMD ["php-fpm", "-F"]

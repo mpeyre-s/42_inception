@@ -1,7 +1,12 @@
 #!/bin/sh
 set -e
 
-# create wordpress config (if unexisting)
+echo "Waiting for MySQL to be available..."
+while ! mysqladmin ping -h mariadb -u ${MYSQL_USER} -p${MYSQL_PASSWORD} --silent; do
+    sleep 1
+done
+echo "MySQL is available, proceeding with WordPress setup"
+
 if [ ! -f "/var/www/html/wp-config.php" ]; then
     wp config create \
         --dbname=$MYSQL_DATABASE \
@@ -28,6 +33,7 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
         --allow-root
 fi
 
-# start php
-exec php-fpm81 -F
+php_fpm_executable=$(which php-fpm)
+echo "Starting PHP-FPM: $php_fpm_executable"
 
+exec $php_fpm_executable -F
