@@ -20,4 +20,4 @@ fi
 
 sleep 5
 
-exec "$@"
+exec mysqld --user=mysql --console
