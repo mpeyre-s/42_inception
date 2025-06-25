@@ -1,8 +1,7 @@
 # Project variables
 PROJECT = inception
 EXERCISE = 42
-CONTAINERS = nginx # wordpress mariadb
-SECRETS = secrets/credentials.txt secrets/db_password.txt secrets/db_root_password.txt
+CONTAINERS = nginx wordpress mariadb
 
 # Colors
 ORANGE = \033[0;33m
@@ -13,7 +12,10 @@ RESET = \033[0m
 # Dynamic info
 SRC_COUNT = 3
 
-all: header build up
+VOLUMES_PATH = $(HOME)/data
+VOLUME_DIRS = wordpress mariadb
+
+all: header setup_volumes build up
 
 header:
 	@echo "\033[38;5;39m—————————————————————————————————————————————————————————\033[0m"
@@ -33,6 +35,17 @@ up:
 	echo "➡️  $(GREEN)\033[4mContainers started successfully ✅\033[0m$(RESET)" || \
 	echo "$(RED)➡️  Error while starting containers$(RESET) ❌"
 
+setup_volumes:
+	@echo "$(ORANGE)Setting up data volumes...$(RESET)"
+	@mkdir -p $(VOLUMES_PATH)
+	@for dir in $(VOLUME_DIRS); do \
+		echo "Creating $$dir volume directory"; \
+		rm -rf $(VOLUMES_PATH)/$$dir; \
+		mkdir -p $(VOLUMES_PATH)/$$dir; \
+		chmod 755 $(VOLUMES_PATH)/$$dir; \
+	done
+	@echo "➡️  $(GREEN)Volumes setup complete ✅$(RESET)"
+
 down:
 	@docker-compose -f srcs/docker-compose.yml down && \
 	echo "" && \
@@ -51,4 +64,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all build up down clean fclean re header
+.PHONY: all build up down clean fclean re header setup_volumes
