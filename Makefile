@@ -61,7 +61,12 @@ clean: down
 	@echo ""
 
 fclean: clean
-	@echo "$(RED)All Docker resources cleaned$(RESET)"
+    @echo "$(ORANGE)Removing volume directories...$(RESET)"
+    @for dir in $(VOLUME_DIRS); do \
+        echo "Removing $$dir volume directory"; \
+        sudo rm -rf $(VOLUMES_PATH)/$$dir; \
+    done
+    @echo "$(RED)All Docker resources cleaned$(RESET)"
 
 re: fclean all
 
