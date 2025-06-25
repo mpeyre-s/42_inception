@@ -30,7 +30,11 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 	--role=author \
 	--user_pass="$WP_USER_PASSWORD" \
 	--allow-root
+
+	echo "WP config created"
 fi
+
+echo "WP config loaded"
 
 php_fpm_executable=$(which php-fpm)
 echo "Starting PHP-FPM: $php_fpm_executable"
