@@ -40,9 +40,10 @@ setup_volumes:
 	@mkdir -p $(VOLUMES_PATH)
 	@for dir in $(VOLUME_DIRS); do \
 		echo "Creating $$dir volume directory"; \
-		rm -rf $(VOLUMES_PATH)/$$dir; \
-		mkdir -p $(VOLUMES_PATH)/$$dir; \
-		chmod 755 $(VOLUMES_PATH)/$$dir; \
+		sudo rm -rf $(VOLUMES_PATH)/$$dir; \
+		sudo mkdir -p $(VOLUMES_PATH)/$$dir; \
+		sudo chmod 755 $(VOLUMES_PATH)/$$dir; \
+		sudo chown $(USER):$(USER) $(VOLUMES_PATH)/$$dir; \
 	done
 	@echo "➡️  $(GREEN)Volumes setup complete ✅$(RESET)"
 
