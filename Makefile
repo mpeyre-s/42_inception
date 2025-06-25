@@ -66,6 +66,7 @@ fclean: clean
 		echo "Removing $$dir volume directory"; \
 		sudo rm -rf $(VOLUMES_PATH)/$$dir; \
 	done
+	@docker volume rm $(docker volume ls -q)
 	@echo "$(RED)All Docker resources cleaned$(RESET)"
 
 re: fclean all
