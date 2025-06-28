@@ -24,7 +24,7 @@ header:
 	@echo "$(ORANGE)Starting Inception…$(RESET)"
 
 build:
-	@docker-compose -f srcs/docker-compose.yml build && \
+	@DOCKER_BUILDKIT=1 docker-compose -f srcs/docker-compose.yml build --build-arg BUILDKIT_INLINE_CACHE=1 && \
 	echo "" && \
 	echo "➡️  $(GREEN)\033[4mContainers built successfully ✅\033[0m$(RESET)" || \
 	echo "$(RED)➡️  Error while building containers$(RESET) ❌"
