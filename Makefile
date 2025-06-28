@@ -40,11 +40,13 @@ setup_volumes:
 	@if [ ! -d "/home/$(USER)/data" ]; then \
 		mkdir -p /home/$(USER)/data/wordpress && \
 		mkdir -p /home/$(USER)/data/mariadb; \
+		mkdir -p /home/$(USER)/data/minecraft; \
 	fi
 	@sudo chown -R $(USER):$(USER) /home/$(USER)/data/wordpress
 	@sudo chown -R $(USER):$(USER) /home/$(USER)/data/mariadb
 	@sudo chmod 755 /home/$(USER)/data/wordpress
 	@sudo chmod 755 /home/$(USER)/data/mariadb
+	@sudo chmod 755 /home/$(USER)/data/minecraft
 	@echo "➡️  $(GREEN)Volumes setup complete ✅$(RESET)"
 
 down:
