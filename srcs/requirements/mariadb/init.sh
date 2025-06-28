@@ -22,11 +22,14 @@ echo "MariaDB is running"
 
 echo "User and database configuration..."
 
-mysql -uroot --protocol=socket <<EOSQL
+mysql -uroot <<EOSQL
     -- Set root password
     ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'
         PASSWORD EXPIRE NEVER
         ACCOUNT UNLOCK;
+
+    CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
 
     CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
 
@@ -45,6 +48,9 @@ mysql -uroot --protocol=socket <<EOSQL
     GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'localhost';
     GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'wordpress';
     GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'wordpress.srcs_inception';
+
+    DELETE FROM mysql.user WHERE User='';
+    DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 
     FLUSH PRIVILEGES;
 EOSQL
