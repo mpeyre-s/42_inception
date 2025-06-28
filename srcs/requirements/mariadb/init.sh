@@ -22,7 +22,7 @@ echo "MariaDB is running"
 
 echo "User and database configuration..."
 
-mysql -uroot <<EOSQL
+mysql -h localhost -uroot <<EOSQL
     -- Set root password
     ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'
         PASSWORD EXPIRE NEVER
