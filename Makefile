@@ -37,14 +37,14 @@ up:
 
 setup_volumes:
 	@echo "$(ORANGE)Setting up data volumes...$(RESET)"
-	@mkdir -p $(VOLUMES_PATH)
-	@for dir in $(VOLUME_DIRS); do \
-		echo "Creating $$dir volume directory"; \
-		sudo rm -rf $(VOLUMES_PATH)/$$dir; \
-		sudo mkdir -p $(VOLUMES_PATH)/$$dir; \
-		sudo chmod 755 $(VOLUMES_PATH)/$$dir; \
-		sudo chown $(USER):$(USER) $(VOLUMES_PATH)/$$dir; \
-	done
+	@if [ ! -d "/home/$(USER)/data" ]; then \
+		mkdir -p /home/$(USER)/data/wordpress && \
+		mkdir -p /home/$(USER)/data/mariadb && \
+	fi
+	@sudo chown -R $(USER):$(USER) /home/$(USER)/data/wordpress
+	@sudo chown -R $(USER):$(USER) /home/$(USER)/data/mariadb
+	@sudo chmod 755 /home/$(USER)/data/wordpress
+	@sudo chmod 755 /home/$(USER)/data/mariadb
 	@echo "➡️  $(GREEN)Volumes setup complete ✅$(RESET)"
 
 down:
@@ -66,6 +66,7 @@ fclean: clean
 		echo "Removing $$dir volume directory"; \
 		sudo rm -rf $(VOLUMES_PATH)/$$dir; \
 	done
+	@sudo rm -rf $(VOLUMES_PATH)
 	@if [ -n "$(shell docker volume ls -q)" ]; then \
 		docker volume rm $(shell docker volume ls -q); \
 	fi
