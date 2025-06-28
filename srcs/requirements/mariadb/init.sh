@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$SQL_DATABASE" ] || [ -z "$SQL_USER" ] || [ -z "$SQL_PASSWORD" ] || [ -z "$SQL_ROOT_PASSWORD" ]; then
+if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ] || [ -z "$SQL_ROOT_PASSWORD" ]; then
     echo "ERROR: Missing environment variables"
     exit 1
 fi
@@ -24,21 +24,21 @@ echo "User and database configuration..."
 
 mysql -uroot <<EOSQL
     -- Set root password
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}'
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'
         PASSWORD EXPIRE NEVER
         ACCOUNT UNLOCK;
 
-    CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;
+    CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
 
     -- Recreate users to ensure correct password
-    DROP USER IF EXISTS '${SQL_USER}'@'%';
-    DROP USER IF EXISTS '${SQL_USER}'@'localhost';
+    DROP USER IF EXISTS '${MYSQL_USER}'@'%';
+    DROP USER IF EXISTS '${MYSQL_USER}'@'localhost';
 
-    CREATE USER '${SQL_USER}'@'%' IDENTIFIED BY '${SQL_PASSWORD}';
-    CREATE USER '${SQL_USER}'@'localhost' IDENTIFIED BY '${SQL_PASSWORD}';
+    CREATE USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+    CREATE USER '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';
 
-    GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO '${SQL_USER}'@'%';
-    GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO '${SQL_USER}'@'localhost';
+    GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+    GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'localhost';
 
     DELETE FROM mysql.user WHERE User='';
     DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
@@ -49,7 +49,7 @@ EOSQL
 cat > /tmp/mysqladmin.cnf << EOF
 [client]
 user=root
-password=${SQL_ROOT_PASSWORD}
+password=${MYSQL_ROOT_PASSWORD}
 EOF
 
 chmod 600 /tmp/mysqladmin.cnf
