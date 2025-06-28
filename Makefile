@@ -39,7 +39,8 @@ setup_volumes:
 	@echo "$(ORANGE)Setting up data volumes...$(RESET)"
 	@if [ ! -d "/home/$(USER)/data" ]; then \
 		mkdir -p /home/$(USER)/data/wordpress && \
-		mkdir -p /home/$(USER)/data/mariadb
+		mkdir -p /home/$(USER)/data/mariadb; \
+	fi
 	@sudo chown -R $(USER):$(USER) /home/$(USER)/data/wordpress
 	@sudo chown -R $(USER):$(USER) /home/$(USER)/data/mariadb
 	@sudo chmod 755 /home/$(USER)/data/wordpress
