@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ] || [ -z "$SQL_ROOT_PASSWORD" ]; then
+if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ] || [ -z "$MYSQL_ROOT_PASSWORD" ]; then
     echo "ERROR: Missing environment variables"
     exit 1
 fi
