@@ -12,8 +12,6 @@ RUN mkdir -p /etc/ssl/private /etc/ssl/certs /etc/nginx/ssl && \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY html/ /usr/share/nginx/html
-
 COPY ssl/ /etc/nginx/ssl
 
 EXPOSE 443
