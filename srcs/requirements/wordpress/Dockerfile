@@ -16,7 +16,7 @@ RUN apt update -y && \
 
 RUN mkdir -p /run/php
 
-COPY cwww.conf /etc/php/7.4/fpm/pool.d/www.conf
+COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 RUN wget https://fr.wordpress.org/wordpress-6.8.1-fr_FR.tar.gz -P /var/www && \
 	tar -xzf /var/www/wordpress-6.8.1-fr_FR.tar.gz -C /var/www && \
